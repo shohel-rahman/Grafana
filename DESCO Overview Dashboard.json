@@ -1,0 +1,1635 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 4,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Row 1",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": -1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.consumer FROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "                    Consumer",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 6,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": []
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT IFNULL(SUM(mpd.consumer_nos),0) AS Prepaid, (pm.consumer -SUM(mpd.consumer_nos)) Postpaid\r\nFROM `MOD_PREPAID_DATA` mpd, PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and mpd.DIVISION_ID = snd.division_id AND mpd.`YEAR` = (SELECT MAX(`YEAR`) from MOD_PREPAID_DATA) \r\nAND mpd.`MONTH` = (SELECT MAX(`MONTH`) from MOD_PREPAID_DATA WHERE `YEAR`= (SELECT MAX(`YEAR`) from MOD_PREPAID_DATA)) \r\nAND pm.`year` = mpd.`YEAR` AND mpd.DIVISION_ID = pm.division_id AND pm.`month` = mpd.`MONTH` \r\ngroup by mpd.year, mpd.`MONTH`, snd.division_id ;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Consumer Type",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 11,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": []
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT \"Residential\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff IN ('A', 'MT1') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"Commercial\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff IN ('E', 'MT2','HT2') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"Industrial\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff IN ('C1', 'MT3','HT3') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"Other\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff not IN ('A', 'MT1','E', 'MT2','HT2','C1', 'MT3','HT3') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Consumer Pattern",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "consumer",
+                  "0.23/0.4 KV",
+                  "11 KV"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 15,
+      "options": {
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": []
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT \"0.23/0.4 KV\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff IN ('A', 'B', 'C1', 'C2', 'D1', 'D2', 'D3','E','T') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"11 KV\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff LIKE 'MT%' AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"33 KV\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff LIKE 'HT%' AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"132/230 KV\" as type, sum(ptf.consumer_nos) as consumer \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff LIKE 'EHT%' AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Connection Pattern",
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 13,
+      "panels": [],
+      "title": "Row 2",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "kwatt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 0,
+        "y": 10
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.ytd_import_unit FROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Energy Import",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "kwatt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 4,
+        "y": 10
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.ytd_sales_unit FROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Energy Sold",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "max": 8.5,
+          "min": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 8,
+        "y": 10
+      },
+      "id": 12,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ytd_system_loss$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.ytd_system_loss FROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "System Loss",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "kwatt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 12,
+        "y": 10
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH LatestFiscalYear AS (SELECT DISTINCT `YEAR` AS fiscal_year_start FROM `MAXIMUM_LOAD_DEMAND` WHERE `MONTH` > 6 ORDER BY `YEAR` DESC LIMIT 1),\r\nLatestFiscalYearEnd AS (SELECT fiscal_year_start + 1 AS fiscal_year_end FROM LatestFiscalYear)\r\nSELECT MAX(`MAX_LOAD`) AS MaxLoad\r\nFROM desco.`MAXIMUM_LOAD_DEMAND` mld, desco.SALES_DISTRIBUTION_DIVISION snd  \r\nWHERE snd.DIVISION_NAME=\"$Division\" AND mld.DIVISION_ID = snd.DIVISION_ID\r\nAND (\r\n    (`YEAR` = (SELECT fiscal_year_start FROM LatestFiscalYear) AND `MONTH` > 6) \r\n    OR \r\n    (`YEAR` = (SELECT fiscal_year_end FROM LatestFiscalYearEnd) AND `MONTH` < 7)\r\n);",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Peak Load",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 10
+      },
+      "id": 4,
+      "options": {
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": []
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT \"Residential\" as type, sum(ptf.ytd_unit) as consumption \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff IN ('A', 'MT1') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"Commercial\" as type, sum(ptf.ytd_unit) as consumption \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff IN ('E', 'MT2','HT2') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"Industrial\" as type, sum(ptf.ytd_unit) as consumption \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff IN ('C1', 'MT3','HT3') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"\r\nUNION \r\nSELECT \"Other\" as type, sum(ptf.ytd_unit) as consumption \r\nFROM `PUBLISHED_TRF_WISE_MOD`ptf, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE ptf.division_id = snd.DIVISION_ID AND ptf.tariff not IN ('A', 'MT1','E', 'MT2','HT2','C1', 'MT3','HT3') AND ptf.year =(SELECT MAX(`YEAR`) from desco.PUBLISHED_TRF_WISE_MOD) \r\nAND ptf.month= (SELECT MAX(`MONTH`) from PUBLISHED_TRF_WISE_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_TRF_WISE_MOD)) \r\nand snd.DIVISION_NAME = \"$Division\"",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Consumption Pattern",
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 19,
+      "panels": [],
+      "title": "Row 3",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "currency:৳"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 20
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.ytd_bill_amount FROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Bill Amount",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "currency:৳"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 20
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.ytd_coll_amount FROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Collection Amount",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 94,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 20
+      },
+      "id": 14,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ytd_bc_ratio$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.ytd_bc_ratio\r\nFROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Collection to Bill Ratio",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "mappings": [],
+          "max": 99,
+          "min": 85,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 20
+      },
+      "id": 16,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ytd_ci_ratio$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pm.ytd_ci_ratio \r\nFROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd\r\nWHERE snd.division_name=\"$Division\" and pm.DIVISION_ID = snd.division_id AND pm.`YEAR` = (SELECT MAX(`YEAR`) from PUBLISHED_MOD) \r\nAND pm.`MONTH` = (SELECT MAX(`MONTH`) from PUBLISHED_MOD WHERE `YEAR`= (SELECT MAX(`YEAR`) from PUBLISHED_MOD ));",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Collection to Import Ratio",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 7,
+      "panels": [],
+      "title": "Row 111",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "log": 10,
+              "type": "log"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "megwatt"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "year-month"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:MMM-YY"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 13,
+        "x": 0,
+        "y": 25
+      },
+      "id": 5,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "normal",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT concat(year,\"-\", month) \"year-month\",  MAX_LOAD \"Maximum Demand\" FROM (\r\nSELECT year, month, mld.MAX_LOAD FROM MAXIMUM_LOAD_DEMAND mld, SALES_DISTRIBUTION_DIVISION snd\r\nWHERE mld.DIVISION_ID = snd.division_id AND snd.DIVISION_NAME =\"$Division\"\r\nORDER BY year DESC, month DESC LIMIT 18 ) as sub\r\nORDER BY year ASC, month ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Peak Demand",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "year-month"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:MMM-YY"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 14,
+        "x": 0,
+        "y": 35
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "normal",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": -45,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT CONCAT(year,\"-\",`month`) \"year-month\",  acc_receivable_eqv_month \"A/C Receivables Equivalent Month\" from(\r\nSELECT year, month, pm.acc_receivable_eqv_month \r\nfrom desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd WHERE snd.DIVISION_ID = pm.division_id \r\nAND snd.DIVISION_NAME =\"$Division\"\r\nORDER BY `year` DESC, month desc LIMIT 18) as data order by year,month;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Account Receivables Equivalent Month",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "beklfy29dl8n4f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "System Loss",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:MMM-YY"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Monthly System Loss"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "YTD System Loss"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "asc"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT STR_TO_DATE(CONCAT(year,'-',LPAD(month,2,'0'),'-01'),'%Y-%m-%d') AS time, system_loss AS value\r\nFROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd WHERE snd.division_name = \"$Division\" and snd.division_id = pm.division_id;",
+          "refId": "sys loss",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "dataset": "desco",
+          "datasource": {
+            "type": "mysql",
+            "uid": "beklfy29dl8n4f"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n  STR_TO_DATE(\r\n    CONCAT(year, '-', LPAD(month, 2, '0'), '-01'),\r\n    '%Y-%m-%d'\r\n  ) AS time, ytd_system_loss AS value FROM desco.PUBLISHED_MOD pm, desco.SALES_DISTRIBUTION_DIVISION snd \r\n  WHERE snd.division_name = \"$Division\" and snd.division_id = pm.division_id;",
+          "refId": "ytd sys loss",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "System Loss",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "DESCO",
+          "value": "DESCO"
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "beklfy29dl8n4f"
+        },
+        "definition": "SELECT  sdd.DIVISION_NAME FROM SALES_DISTRIBUTION_DIVISION sdd; ",
+        "description": "Select S & D",
+        "includeAll": false,
+        "label": "S & D",
+        "name": "Division",
+        "options": [],
+        "query": "SELECT  sdd.DIVISION_NAME FROM SALES_DISTRIBUTION_DIVISION sdd; ",
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "DESCO Overview",
+  "uid": "eeklgzlead5ogf",
+  "version": 77
+}
